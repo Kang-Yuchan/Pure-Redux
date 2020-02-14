@@ -1,12 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { createStore } from "redux";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const add = document.getElementById("add");
+const minus = document.getElementById("minus");
+const number = document.querySelector("span");
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const ADD = "ADD";
+const MINUS = "MINUS";
+
+const countModifier = (count = 0, action) => {
+    switch (action.type) {
+        case ADD:
+            return count + 1;
+        case MINUS:
+            return count - 1;
+        default:
+            return count;
+    }
+}
+
+const countStore = createStore(countModifier);
+
+const onChange = () => {
+    number.innerText = countStore.getState()
+}
+
+countStore.subscribe(onChange);
+
+const implement = () => {
+    countStore.dispatch({ type: ADD })
+}
+
+const deplement = () => {
+    countStore.dispatch({ type: MINUS })
+}
+
+add.addEventListener("click", implement)
+minus.addEventListener("click", deplement)
